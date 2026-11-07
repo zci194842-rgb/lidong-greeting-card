@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>立冬 · 致妈妈</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄</text></svg>">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --night-1: #0e1a3a;
+    --night-2: #1b2a52;
+    --night-3: #2a3a6a;
+    --warm: #ffb86b;
+    --warm-soft: #ffd9a8;
+    --cream: #f5ead6;
+    --muted: #b8c2dc;
+    --accent: #e8a87c;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    background: var(--night-1);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ===== 背景层 ===== */
+  .sky {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,184,107,0.25) 0%, rgba(255,184,107,0.08) 40%, transparent 70%),
+      linear-gradient(180deg, #0a1430 0%, #16244d 45%, #2a3a6a 80%, #3d3560 100%);
+    z-index: 0;
+  }
+
+  #snow {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* 远处山影 */
+  .mountains {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 30vh;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* 月亮 */
+  .moon {
+    position: fixed;
+    top: 8%;
+    right: 12%;
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff8e0, #f0e0b0 60%, #d4c089);
+    box-shadow: 0 0 40px rgba(255,240,200,0.5), 0 0 80px rgba(255,240,200,0.2);
+    z-index: 1;
+    animation: moonGlow 6s ease-in-out infinite alternate;
+  }
+  @keyframes moonGlow {
+    from { box-shadow: 0 0 30px rgba(255,240,200,0.4); }
+    to   { box-shadow: 0 0 60px rgba(255,240,200,0.7); }
+  }
+
+  /* ===== 内容层 ===== */
+  .wrap {
+    position: relative;
+    z-index: 3;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 48px 24px 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .to-line {
+    font-size: 14px;
+    letter-spacing: 0.4em;
+    color: var(--warm-soft);
+    opacity: 0;
+    animation: fadeUp 1.2s 0.3s forwards;
+  }
+
+  .title {
+    margin-top: 18px;
+    font-size: 64px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-indent: 0.3em;
+    background: linear-gradient(180deg, #fff5e0 0%, var(--warm) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    animation: fadeUp 1.4s 0.6s forwards;
+  }
+
+  .divider {
+    margin: 28px 0;
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--warm), transparent);
+    opacity: 0;
+    animation: fadeIn 1.2s 1.1s forwards;
+  }
+
+  .poem {
+    text-align: center;
+    line-height: 2.2;
+    font-size: 16px;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 1.4s 1.3s forwards;
+  }
+  .poem p { margin-bottom: 6px; }
+  .poem .soft { color: var(--muted); font-size: 14px; }
+
+  /* ===== 选择题 ===== */
+  .quiz {
+    margin-top: 44px;
+    width: 100%;
+    opacity: 0;
+    animation: fadeUp 1.4s 2s forwards;
+  }
+
+  .quiz-q {
+    text-align: center;
+    font-size: 18px;
+    color: var(--warm-soft);
+    margin-bottom: 22px;
+    letter-spacing: 0.08em;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    min-height: 44px;
+    font-family: inherit;
+    color: var(--cream);
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+  }
+  .opt:hover {
+    background: rgba(255,184,107,0.12);
+    border-color: rgba(255,184,107,0.4);
+    transform: translateY(-2px);
+  }
+  .opt.selected {
+    background: rgba(255,184,107,0.2);
+    border-color: var(--warm);
+    box-shadow: 0 0 24px rgba(255,184,107,0.25);
+  }
+  .opt .icon {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .opt .icon svg { width: 28px; height: 28px; }
+
+  /* ===== 选择后回复 ===== */
+  .reply {
+    margin-top: 28px;
+    padding: 22px 20px;
+    background: linear-gradient(135deg, rgba(255,184,107,0.15), rgba(232,168,124,0.08));
+    border: 1px solid rgba(255,184,107,0.3);
+    border-radius: 16px;
+    text-align: center;
+    line-height: 2;
+    font-size: 15px;
+    color: var(--warm-soft);
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.8s ease, max-height 0.8s ease, margin 0.8s ease;
+  }
+  .reply.show {
+    opacity: 1;
+    max-height: 300px;
+  }
+  .reply .heart {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--warm);
+    font-size: 13px;
+    letter-spacing: 0.3em;
+  }
+
+  .footer {
+    margin-top: 48px;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    opacity: 0;
+    animation: fadeIn 1.5s 2.6s forwards;
+    text-align: center;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* 大屏幕微调 */
+  @media (min-width: 768px) {
+    .title { font-size: 80px; }
+    .poem { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky"></div>
+<div class="moon"></div>
+
+<!-- 远山 SVG -->
+<svg class="mountains" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true">
+  <path fill="#1a2547" d="M0,224 L120,180 L280,230 L440,160 L620,220 L780,170 L960,230 L1140,180 L1300,220 L1440,190 L1440,320 L0,320 Z"/>
+  <path fill="#0f1838" d="M0,260 L180,220 L360,270 L560,210 L760,265 L960,225 L1180,270 L1380,235 L1440,250 L1440,320 L0,320 Z"/>
+</svg>
+
+<canvas id="snow"></canvas>
+
+<div class="wrap">
+
+  <div class="to-line">TO · 妈妈</div>
+  <h1 class="title">立冬</h1>
+  <div class="divider"></div>
+
+  <div class="poem">
+    <p>今日立冬，北风渐起。</p>
+    <p>日子一下子就冷了下来。</p>
+    <p class="soft">记得添衣，记得喝热汤，</p>
+    <p class="soft">记得把手里的热茶，握久一点。</p>
+    <p style="margin-top:14px;">这一年，你辛苦了。</p>
+    <p>这个冬天，要好好被爱着。</p>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-q">妈妈，此时此刻，<br>最想吃什么？</div>
+    <div class="options">
+
+      <button class="opt" data-key="coffee">
+        <span class="icon">
+          <!-- 热咖啡 SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffb86b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 8h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8z"/>
+            <path d="M17 9h2a2.5 2.5 0 0 1 0 5h-2"/>
+            <path d="M8 3c0 1-1 1.5-1 2.5S8 7 8 8"/>
+            <path d="M12 3c0 1-1 1.5-1 2.5S12 7 12 8"/>
+          </svg>
+        </span>
+        <span>一杯热咖啡</span>
+      </button>
+
+      <button class="opt" data-key="chestnut">
+        <span class="icon">
+          <!-- 板栗 SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffb86b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3C8 5 5 8 5 12a7 7 0 0 0 14 0c0-4-3-7-7-9z"/>
+            <path d="M12 8v11"/>
+            <path d="M8 12c1 1 2 1.5 4 1.5s3-.5 4-1.5"/>
+          </svg>
+        </span>
+        <span>一份糖炒板栗</span>
+      </button>
+
+      <button class="opt" data-key="drink">
+        <span class="icon">
+          <!-- 杨枝甘露/奶茶杯 SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffb86b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 8h10l-1.2 11a2 2 0 0 1-2 1.8h-3.6a2 2 0 0 1-2-1.8L7 8z"/>
+            <path d="M6 8h12"/>
+            <path d="M9 8V5a3 3 0 0 1 6 0v3"/>
+            <circle cx="10" cy="16" r="0.8" fill="#ffb86b"/>
+            <circle cx="13" cy="17" r="0.8" fill="#ffb86b"/>
+            <circle cx="11.5" cy="18" r="0.8" fill="#ffb86b"/>
+          </svg>
+        </span>
+        <span>杨枝甘露</span>
+      </button>
+
+      <button class="opt" data-key="chestnut2">
+        <span class="icon">
+          <!-- 板栗 SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffb86b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="14" rx="6" ry="7"/>
+            <path d="M12 7v14"/>
+            <path d="M8 11c1.5 1 2.5 1.5 4 1.5s2.5-.5 4-1.5"/>
+          </svg>
+        </span>
+        <span>板栗</span>
+      </button>
+
+    </div>
+
+    <div class="reply" id="reply">
+      <span class="heart">✦ 回 信 ✦</span>
+      <span id="reply-text"></span>
+    </div>
+  </div>
+
+  <div class="footer">愿你三冬暖 · 愿你春不寒<br>立冬安康</div>
+</div>
+
+<script>
+// ===== 飘雪 =====
+const canvas = document.getElementById('snow');
+const ctx = canvas.getContext('2d');
+let W, H, flakes = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const FLAKE_COUNT = 120;
+for (let i = 0; i < FLAKE_COUNT; i++) {
+  flakes.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 2.5 + 0.8,
+    speed: Math.random() * 0.8 + 0.3,
+    drift: Math.random() * 0.6 - 0.3,
+    opacity: Math.random() * 0.6 + 0.3
+  });
+}
+
+function drawSnow() {
+  ctx.clearRect(0, 0, W, H);
+  flakes.forEach(f => {
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,' + f.opacity + ')';
+    ctx.fill();
+    f.y += f.speed;
+    f.x += f.drift;
+    if (f.y > H + 5) { f.y = -5; f.x = Math.random() * W; }
+    if (f.x > W + 5) f.x = -5;
+    if (f.x < -5) f.x = W + 5;
+  });
+  requestAnimationFrame(drawSnow);
+}
+drawSnow();
+
+// ===== 选择题 =====
+const replies = {
+  coffee:  "选得真好。那就让一杯热咖啡，替我把你的手慢慢捂暖。记得慢一点喝，别烫着。",
+  chestnut:"最懂你。冬夜里刚出锅的糖炒栗子，要趁热、一颗一颗剥给你吃，才香。等我回家。",
+  drink:   "原来妈妈心里，也住着一个甜甜的少女呀。这一杯杨枝甘露，我请了，你尽管开心。",
+  chestnut2: "就知道你馋这一口。街角刚出锅的糖炒栗子，热乎乎捧在手里，连风都是甜的。"
+};
+
+const opts = document.querySelectorAll('.opt');
+const replyBox = document.getElementById('reply');
+const replyText = document.getElementById('reply-text');
+
+opts.forEach(btn => {
+  btn.addEventListener('click', () => {
+    opts.forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    replyText.textContent = replies[btn.dataset.key];
+    replyBox.classList.add('show');
+    replyBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+});
+</script>
+
+</body>
+</html>
